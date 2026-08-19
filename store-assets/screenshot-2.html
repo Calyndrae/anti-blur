@@ -1,0 +1,79 @@
+<meta charset="utf-8">
+<style>
+  :root {
+    --ground:#dfe3e8; --surface:#fbfcfd; --ink:#14171c; --muted:#545c69;
+    --rule:#d3d8df;   --ok:#12704a;      --leak:#b0362a;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 800px; overflow: hidden; }
+  body {
+    background: var(--surface); color: var(--ink);
+    font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased;
+  }
+  main { height: 724px; padding: 0 72px; display: flex; flex-direction: column; justify-content: center; }
+  h1 { font-size: 38px; line-height: 1.14; letter-spacing: -0.025em; font-weight: 600; text-wrap: balance; }
+  .lede { color: var(--muted); font-size: 16.5px; margin-top: 14px; max-width: 62ch; text-wrap: pretty; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 46px; }
+  th { text-align: left; padding: 0 0 11px; border-bottom: 1.5px solid var(--ink); }
+  th span { font: 500 10.5px/1 var(--mono); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+  th.v { text-align: right; width: 232px; }
+  th.v.on span { color: var(--ok); }
+  td { padding: 21px 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+  td.sig { font: 400 14.5px/1.4 var(--mono); color: var(--ink); }
+  td.sig em { display: block; font: 400 12.5px/1.5 var(--sans); font-style: normal; color: var(--muted); margin-top: 4px; }
+  td.v { text-align: right; font: 500 14.5px/1.4 var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.v.off { color: var(--leak); }
+  td.v.on  { color: var(--ok); }
+
+  .cap {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 76px;
+    background: var(--ink); color: #f2f4f7; display: flex; align-items: center; padding: 0 72px;
+  }
+  .cap p { font-size: 16.5px; letter-spacing: -0.01em; }
+  .cap p b { font-weight: 600; }
+</style>
+
+<main>
+  <h1>What a website can measure about your attention</h1>
+  <p class="lede">These four signals are how any page knows you looked away. Anti Blur
+  answers all of them the same way, every time, so there is no pattern left to read.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th><span>Signal the page reads</span></th>
+        <th class="v"><span>Normally</span></th>
+        <th class="v on"><span>With Anti Blur</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sig">document.hasFocus()<em>Whether the window is the one you are typing into</em></td>
+        <td class="v off">false</td>
+        <td class="v on">true</td>
+      </tr>
+      <tr>
+        <td class="sig">document.hidden<em>Whether this tab is the one on screen</em></td>
+        <td class="v off">true</td>
+        <td class="v on">false</td>
+      </tr>
+      <tr>
+        <td class="sig">document.visibilityState<em>The same answer, as a readable string</em></td>
+        <td class="v off">"hidden"</td>
+        <td class="v on">"visible"</td>
+      </tr>
+      <tr>
+        <td class="sig">blur · visibilitychange · mouseleave<em>Events that fire the moment your attention moves</em></td>
+        <td class="v off">delivered</td>
+        <td class="v on">never delivered</td>
+      </tr>
+    </tbody>
+  </table>
+</main>
+
+<div class="cap">
+  <p>Videos and timers keep running. <b>Attention tracking gets a flat line.</b></p>
+</div>

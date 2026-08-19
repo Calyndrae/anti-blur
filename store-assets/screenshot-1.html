@@ -1,0 +1,168 @@
+<meta charset="utf-8">
+<style>
+  :root {
+    --ground:#dfe3e8; --surface:#fbfcfd; --ink:#14171c; --muted:#545c69;
+    --rule:#d3d8df;   --ok:#12704a;      --ok-bg:#e4f0ea;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 800px; overflow: hidden; }
+  body { font: 400 14px/1.5 var(--sans); color: var(--ink); -webkit-font-smoothing: antialiased; background: var(--surface); }
+
+  /* ── browser chrome ─────────────────────────────────────────────── */
+  .tabs { height: 44px; background: var(--ground); display: flex; align-items: flex-end; padding: 0 12px; gap: 4px; }
+  .tab {
+    height: 34px; display: flex; align-items: center; gap: 8px; padding: 0 16px;
+    font-size: 12.5px; color: var(--muted); border-radius: 7px 7px 0 0; max-width: 220px;
+  }
+  .tab.on { background: var(--surface); color: var(--ink); font-weight: 500; }
+  .fav { width: 13px; height: 13px; border-radius: 3px; background: #9aa4b1; flex: none; }
+  .tab.on .fav { background: #3d6ef5; }
+  .bar { height: 52px; background: var(--surface); display: flex; align-items: center; gap: 14px; padding: 0 16px; border-bottom: 1px solid var(--rule); }
+  .nav { display: flex; gap: 14px; color: #8d97a4; }
+  .nav svg { display: block; }
+  .url {
+    flex: 1; height: 32px; background: var(--ground); border-radius: 6px;
+    display: flex; align-items: center; gap: 9px; padding: 0 13px;
+    font: 400 12.5px/1 var(--mono); color: var(--muted);
+  }
+  .url b { color: var(--ink); font-weight: 500; }
+  .ext { display: flex; align-items: center; gap: 10px; }
+  .ext img { width: 20px; height: 20px; border-radius: 4px; }
+  .ext .slot { width: 20px; height: 20px; border-radius: 4px; background: #b9c1cb; }
+  .ext .live { padding: 5px; border-radius: 6px; background: var(--ok-bg); margin: -5px; }
+
+  /* ── page behind ────────────────────────────────────────────────── */
+  /* A left-aligned content column, so the popup lands on empty page rather
+     than slicing through the layout. */
+  .page { height: 704px; padding: 30px 56px; }
+  .player { width: 700px; }
+  .video {
+    aspect-ratio: 16/9; border-radius: 4px; position: relative; overflow: hidden;
+    background: linear-gradient(155deg, #2b3442 0%, #1b2230 55%, #232c3a 100%);
+  }
+  .video::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(38% 55% at 32% 38%, rgba(120,150,200,.22), transparent 70%);
+  }
+  .ctl { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 20px 16px; z-index: 2; }
+  .track { height: 3px; background: rgba(255,255,255,.24); border-radius: 2px; }
+  .track i { display: block; width: 38%; height: 100%; background: #fff; border-radius: 2px; }
+  .ctlrow { display: flex; align-items: center; gap: 14px; margin-top: 13px; color: #fff; }
+  .time { font: 500 12px/1 var(--mono); font-variant-numeric: tabular-nums; opacity: .92; }
+  .pill {
+    margin-left: auto; font: 500 10.5px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase;
+    color: #7ee0ad; display: flex; align-items: center; gap: 6px;
+  }
+  .pill b { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  h2 { font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin-top: 18px; }
+  .sub { color: var(--muted); font-size: 13.5px; margin-top: 5px; }
+  .body { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--rule); }
+  .body p { font-size: 13.5px; line-height: 1.62; color: var(--muted); max-width: 66ch; }
+  .meta { display: flex; gap: 22px; margin-top: 16px; font: 400 11.5px/1 var(--mono); color: #7d8794; }
+
+  /* ── the popup, anchored under its toolbar icon ─────────────────── */
+  .popup {
+    position: absolute; top: 106px; right: 18px; width: 300px;
+    background: var(--surface); border-radius: 9px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(20,23,28,.10), 0 8px 20px -6px rgba(20,23,28,.18),
+                0 28px 56px -16px rgba(20,23,28,.30);
+  }
+  .hd { display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
+  .hd img { width: 26px; height: 26px; border-radius: 5px; }
+  .hd h1 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+  .badge {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+    font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ok); background: var(--ok-bg); border-radius: 3px; padding: 5px 7px;
+  }
+  .badge b { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .lede { padding: 0 16px 12px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+  dl { border-top: 1px solid var(--rule); }
+  .r { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 16px; border-bottom: 1px solid var(--rule); }
+  dt { font: 400 11.5px/1.4 var(--mono); color: var(--muted); }
+  dd { font: 500 11.5px/1.4 var(--mono); color: var(--ok); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ft { display: flex; justify-content: space-between; padding: 11px 16px 13px; font-size: 11px; color: var(--muted); }
+  .ft a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ── caption strip ──────────────────────────────────────────────── */
+  .cap {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 76px;
+    background: var(--ink); color: #f2f4f7; display: flex; align-items: center; gap: 18px; padding: 0 56px;
+  }
+  .cap span { font: 500 10.5px/1 var(--mono); letter-spacing: .09em; text-transform: uppercase; color: #8b96a6; }
+  .cap p { font-size: 16.5px; letter-spacing: -0.01em; }
+  .cap p b { font-weight: 600; }
+</style>
+
+<div class="tabs">
+  <div class="tab on"><i class="fav"></i>Algorithms · Lecture 4</div>
+  <div class="tab"><i class="fav"></i>Problem set 3</div>
+  <div class="tab"><i class="fav"></i>Inbox</div>
+</div>
+
+<div class="bar">
+  <div class="nav">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>
+  </div>
+  <div class="url">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+    lecture-hall.example<b>/algorithms/04</b>
+  </div>
+  <div class="ext">
+    <i class="slot"></i>
+    <i class="slot"></i>
+    <span class="live"><img src="../icons/icon128.png" alt="Anti Blur"></span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="player">
+    <div class="video">
+      <div class="ctl">
+        <div class="track"><i></i></div>
+        <div class="ctlrow">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <span class="time">07:02 / 18:20</span>
+          <span class="pill"><b></b>Still playing</span>
+        </div>
+      </div>
+    </div>
+    <h2>Lecture 4 — Amortized analysis</h2>
+    <p class="sub">You switched to another tab six minutes ago. The video never noticed.</p>
+
+    <div class="body">
+      <p>We introduce the accounting and potential methods, then use both to show that a
+      sequence of n operations on a dynamic array costs O(n) in total even though a single
+      operation can cost O(n) on its own.</p>
+      <div class="meta">
+        <span>Recorded 11 March</span>
+        <span>18 min</span>
+        <span>Transcript available</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="popup">
+  <div class="hd">
+    <img src="../icons/icon128.png" alt="">
+    <h1>Anti Blur</h1>
+    <p class="badge"><b></b>On</p>
+  </div>
+  <p class="lede">Every page you open is told the same four things, whatever you are actually doing:</p>
+  <dl>
+    <div class="r"><dt>document.hasFocus()</dt><dd>true</dd></div>
+    <div class="r"><dt>document.hidden</dt><dd>false</dd></div>
+    <div class="r"><dt>visibilityState</dt><dd>"visible"</dd></div>
+    <div class="r"><dt>blur · visibilitychange</dt><dd>not delivered</dd></div>
+  </dl>
+  <div class="ft"><span>Nothing leaves your device</span><a>Privacy</a></div>
+</div>
+
+<div class="cap">
+  <p>Click away, switch tabs, take a call. The page <b>keeps running as if you never left.</b></p>
+</div>

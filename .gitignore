@@ -1,0 +1,6 @@
+.DS_Store
+*.zip
+dist/
+build/
+test/out/
+.claude/settings.local.json

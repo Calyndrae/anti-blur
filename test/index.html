@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ABT: running…</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 16px; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  #meta { color: #777; margin-bottom: 12px; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+  th, td { border: 1px solid #8884; padding: 3px 6px; vertical-align: top; text-align: left; }
+  th { background: #8882; position: sticky; top: 0; }
+  td.v { font-weight: bold; white-space: nowrap; }
+  tr.PASS td.v { color: #0a0; }
+  tr.FAIL td.v { color: #d00; }
+  tr.INFO td.v { color: #888; }
+  tr.ERROR td.v { color: #b60; }
+  td.d { max-width: 620px; overflow-wrap: anywhere; white-space: pre-wrap; }
+  td.i { white-space: nowrap; }
+  pre#results { border: 1px solid #8884; padding: 8px; overflow: auto; max-height: 60vh; white-space: pre-wrap; overflow-wrap: anywhere; }
+  iframe { width: 40px; height: 20px; border: 1px solid #8884; }
+  #frames { opacity: .35; }
+  .k { color:#888 }
+</style>
+</head>
+<body>
+<h1>Anti&nbsp;Blur adversarial test bench</h1>
+<div id="meta">status: <span id="status">running</span></div>
+
+<table id="tbl">
+  <thead><tr><th>#</th><th>id</th><th>class</th><th>verdict</th><th>what it probes</th><th>observed</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+
+<h2>Machine-readable</h2>
+<pre id="results">{"state":"running"}</pre>
+
+<div id="frames"></div>
+<input id="probeInput" aria-label="probe input">
+<script src="probes.js"></script>
+</body>
+</html>

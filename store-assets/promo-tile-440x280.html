@@ -1,0 +1,39 @@
+<meta charset="utf-8">
+<style>
+  /* Store guidance for promo tiles: saturated, minimal text, fill the region,
+     legible at half size, well-defined edges, no washed-out light greys. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 440px; height: 280px; overflow: hidden; }
+  body {
+    background: #101a33; color: #eef2f8;
+    font: 400 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 28px 30px 26px; position: relative;
+  }
+  /* the trace: attention leaking, then flat */
+  svg.trace { position: absolute; left: 0; right: 0; top: 104px; width: 440px; height: 92px; }
+  .head { display: flex; align-items: center; gap: 12px; position: relative; z-index: 2; }
+  .head img { width: 40px; height: 40px; border-radius: 9px; }
+  h1 { font-size: 27px; font-weight: 650; letter-spacing: -0.028em; }
+  .foot { position: relative; z-index: 2; }
+  .foot span { font-size: 15px; color: #aab7d0; letter-spacing: -0.005em; }
+</style>
+
+<div class="head">
+  <img src="../icons/icon128.png" alt="">
+  <h1>Anti Blur</h1>
+</div>
+
+<svg class="trace" viewBox="0 0 440 92" fill="none" aria-hidden="true">
+  <!-- leaking: every glance away spikes -->
+  <path d="M0 46 L18 46 L26 14 L34 74 L42 46 L62 46 L70 22 L78 68 L86 46 L104 46 L112 8 L120 80 L128 46 L146 46 L154 28 L162 62 L170 46 L188 46"
+        stroke="#ff5546" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- suppressed: flat, forever -->
+  <path d="M188 46 L440 46" stroke="#f2f5fa" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="188" cy="46" r="5.5" fill="#101a33" stroke="#f2f5fa" stroke-width="2.6"/>
+</svg>
+
+<div class="foot">
+  <span>Sites stop noticing when you look away</span>
+</div>

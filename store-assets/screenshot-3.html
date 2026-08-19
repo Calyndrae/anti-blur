@@ -1,0 +1,75 @@
+<meta charset="utf-8">
+<style>
+  :root {
+    --ground:#dfe3e8; --surface:#fbfcfd; --ink:#14171c; --muted:#545c69;
+    --rule:#d3d8df;   --ok:#12704a;
+    --code-bg:#12151a; --c-key:#9ec1ff; --c-str:#8fd6a9; --c-punct:#7f8b9c; --c-com:#6b7787;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 800px; overflow: hidden; }
+  body {
+    background: var(--surface); color: var(--ink);
+    font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased;
+    display: flex; align-items: center; gap: 64px; padding: 0 72px 76px;
+  }
+  .copy { width: 505px; flex: none; }
+  h1 { font-size: 38px; line-height: 1.14; letter-spacing: -0.025em; font-weight: 600; text-wrap: balance; }
+  .lede { color: var(--muted); font-size: 16.5px; margin-top: 14px; text-wrap: pretty; }
+  dl { margin-top: 34px; border-top: 1.5px solid var(--ink); }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 13px 0; border-bottom: 1px solid var(--rule); }
+  dt { font-size: 14.5px; }
+  dd { font: 500 12px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--ok); white-space: nowrap; }
+
+  .code { flex: 1; background: var(--code-bg); border-radius: 5px; padding: 28px 30px 30px; }
+  .code h2 { font: 500 10.5px/1 var(--mono); letter-spacing: .09em; text-transform: uppercase; color: var(--c-com); padding-bottom: 16px; margin-bottom: 18px; border-bottom: 1px solid #232932; }
+  pre { font: 400 13px/1.85 var(--mono); color: #dfe5ee; white-space: pre; }
+  .k { color: var(--c-key); } .s { color: var(--c-str); } .p { color: var(--c-punct); } .c { color: var(--c-com); }
+
+  .cap {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 76px;
+    background: var(--ink); color: #f2f4f7; display: flex; align-items: center; padding: 0 72px;
+  }
+  .cap p { font-size: 16.5px; letter-spacing: -0.01em; }
+  .cap p b { font-weight: 600; }
+</style>
+
+<div class="copy">
+  <h1>It has no way to spy on you</h1>
+  <p class="lede">Not a promise — a property of the code. The extension asks for no
+  permission that would let it store, upload or remember anything. Here is the whole
+  manifest.</p>
+
+  <dl>
+    <div class="row"><dt>Servers it can contact</dt><dd>None</dd></div>
+    <div class="row"><dt>Data written to disk</dt><dd>None</dd></div>
+    <div class="row"><dt>Analytics and ad code</dt><dd>None</dd></div>
+    <div class="row"><dt>Third-party libraries</dt><dd>None</dd></div>
+    <div class="row"><dt>Cost, accounts, upsells</dt><dd>None</dd></div>
+  </dl>
+</div>
+
+<div class="code">
+  <h2>manifest.json</h2>
+<pre><span class="p">{</span>
+  <span class="k">"manifest_version"</span><span class="p">:</span> <span class="s">3</span><span class="p">,</span>
+  <span class="k">"name"</span><span class="p">:</span> <span class="s">"Anti Blur"</span><span class="p">,</span>
+  <span class="k">"version"</span><span class="p">:</span> <span class="s">"1.0.0"</span><span class="p">,</span>
+
+  <span class="c">// no "permissions" key at all</span>
+  <span class="c">// no background service worker</span>
+  <span class="c">// no host_permissions</span>
+
+  <span class="k">"content_scripts"</span><span class="p">: [{</span>
+    <span class="k">"matches"</span><span class="p">:</span> <span class="s">["&lt;all_urls&gt;"]</span><span class="p">,</span>
+    <span class="k">"js"</span><span class="p">:</span> <span class="s">["inject.js"]</span><span class="p">,</span>
+    <span class="k">"run_at"</span><span class="p">:</span> <span class="s">"document_start"</span><span class="p">,</span>
+    <span class="k">"world"</span><span class="p">:</span> <span class="s">"MAIN"</span>
+  <span class="p">}]</span>
+<span class="p">}</span></pre>
+</div>
+
+<div class="cap">
+  <p>One script, about ninety lines. <b>Short enough that you can read it yourself.</b></p>
+</div>
