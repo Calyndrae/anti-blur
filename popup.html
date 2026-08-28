@@ -11,22 +11,40 @@
 <meta name="author" content="Calyndrae">
 <meta name="copyright" content="© 2026 Calyndrae. All rights reserved.">
 <style>
+  /* The product's own faces — see docs/design-system.md in the Perch repo. */
+  @font-face{font-family:"Inter";src:url("fonts/inter-v20-latin-regular.woff2") format("woff2");
+    font-weight:400;font-style:normal;font-display:block}
+  @font-face{font-family:"Inter";src:url("fonts/inter-v20-latin-500.woff2") format("woff2");
+    font-weight:500;font-style:normal;font-display:block}
+  @font-face{font-family:"Inter";src:url("fonts/inter-v20-latin-600.woff2") format("woff2");
+    font-weight:600;font-style:normal;font-display:block}
+  @font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono-v24-latin-regular.woff2") format("woff2");
+    font-weight:400;font-style:normal;font-display:block}
+  @font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono-v24-latin-500.woff2") format("woff2");
+    font-weight:500;font-style:normal;font-display:block}
+
   /* ── tokens ────────────────────────────────────────────────────────────
-     Industrial / mono-technical. Mono carries data, sans carries prose.
-     Base unit 4. Radius 3 (precise register). Semantic ok/leak stay
-     separate from the neutral ramp — they do real work here.            */
+     The shared palette, dark first. This popup had a cool neutral ramp of
+     its own — perfectly good, and the third different near-black among four
+     extensions sold from one Hub. Mono still carries data and sans still
+     carries prose; those are this popup's own rules and they were right.
+     `--ok` keeps its job: the values ARE the substance here.            */
   :root {
-    --ground:#eceef1; --surface:#fbfcfd; --ink:#14171c; --muted:#545c69;
-    --rule:#d3d8df;   --ok:#12704a;      --ok-bg:#e4f0ea;
-    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
-    --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
-    color-scheme: light;
+    --ground:#06070B; --surface:#090B11; --card:#13151B; --ink:#F3F4F6;
+    --muted:#AAAEB5;  --dim:#6E737C;     --rule:#292C32;
+    --ok:#4ADE80;     --ok-bg:rgba(74,222,128,.13);
+    --accent:#D55A34;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
   }
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: light) {
     :root {
-      --ground:#101317; --surface:#171b21; --ink:#e6e9ed; --muted:#98a1ae;
-      --rule:#272c34;   --ok:#5fcf9a;      --ok-bg:#16241e;
-      color-scheme: dark;
+      --ground:#E8E6E2; --surface:#FAFAF9; --card:#FFFFFF; --ink:#16181C;
+      --muted:#5A5F68;  --dim:#8B9099;     --rule:#E0DEDA;
+      --ok:#15803D;     --ok-bg:rgba(21,128,61,.10);
+      --accent:#B84A24;
+      color-scheme: light;
     }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,12 +58,22 @@
   .hd { display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
   .hd img { width: 26px; height: 26px; border-radius: 5px; }
   h1 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+  /* A QUIET LABEL, because it is a label. This popup has no script in it — the
+     badge is the string "ON" and it is true every time anyone opens it. A green
+     pill on a green field is not a focal point, it is more green.
+
+     It was also repeating what the rows below already prove: four spoofed
+     values ARE the extension being on, so saying it again above them is the
+     chrome restating what the content already shows. The colour belongs to the
+     values, which are the substance; this just names the state. */
   .badge {
-    margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+    margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
     font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
-    color: var(--ok); background: var(--ok-bg); border-radius: 3px; padding: 5px 7px;
+    color: var(--muted);
   }
-  .badge b { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .badge b {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--ok);
+  }
 
   /* readout — the substance: what every page is told */
   .lede {
@@ -70,7 +98,9 @@
   }
   .ft a { color: inherit; text-decoration: underline; text-underline-offset: 2px; border-radius: 3px; }
   .ft a:hover { color: var(--ink); }
-  .ft a:focus-visible { outline: 2px solid var(--ok); outline-offset: 3px; }
+  .ft a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .ft a.what { color: var(--accent); text-decoration: none; }
+  .ft a.what:hover { text-decoration: underline; text-underline-offset: 2px; }
 </style>
 
 <div class="hd">
@@ -90,7 +120,8 @@ actually doing:</p>
 </dl>
 
 <div class="ft">
-  <span>Nothing leaves your device</span>
+  <a class="what" href="https://pioneering.calyndrae.workers.dev/docs/ext-anti-blur.html"
+     target="_blank" rel="noopener">What this does &rarr;</a>
   <span><a href="privacy-policy.html" target="_blank" rel="noopener">Privacy</a> ·
         <a href="terms.html" target="_blank" rel="noopener">Terms</a></span>
 </div>
