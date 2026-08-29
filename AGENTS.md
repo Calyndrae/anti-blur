@@ -53,3 +53,10 @@ that's worth asking about.*
   alongside the markdown, not generated from it. Change all four.
 - Section 7 of the terms says the effective date moves when the terms do. It is
   in four places; move it in four places.
+- **The Pioneering URLs in those four files are absolute and are a placeholder.**
+  `pioneering.calyndrae.workers.dev` is a `workers.dev` address, not a bought
+  domain; the Perch repository's `docs/decisions.md` §14 records the swap as an
+  open decision. They have to be absolute because a `chrome-extension://` page
+  cannot resolve a site-relative path, which means they ship inside the package
+  and no deploy on the site's side can reach them. When the domain lands, this
+  repository needs the same find-and-replace and a rebuild.
