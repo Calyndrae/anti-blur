@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Builds the Chrome Web Store upload package.
+# Builds the shipping package — the one the Pioneering Hub delivers, not a Web Store
+# upload. See PUBLISHING.md's header for why that route is not taken.
 # Ships only runtime files — no .DS_Store, no __MACOSX resource forks, no docs.
+# terms.html and privacy-policy.html are runtime files: the popup footer links to them.
 set -euo pipefail
 
 cd "$(dirname "$0")"

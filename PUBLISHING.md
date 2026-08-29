@@ -1,5 +1,24 @@
 # Publishing Anti Blur to the Chrome Web Store
 
+> **This is not the route Anti Blur currently takes, and nothing here has been done.**
+>
+> Anti Blur is delivered by the Pioneering Hub: the package comes out of R2 through the
+> entitlement-checked payload route and is loaded into a browser the Hub starts, over the
+> DevTools protocol. It is not published anywhere, and it is included in a paid plan rather
+> than being free. The reasoning is in the Perch repository, `docs/decisions.md` §12 — the
+> short version is that a Web Store listing would make the extensions free to obtain and
+> move the paywall to a runtime check inside an extension, which is the weakest place in the
+> system to put one.
+>
+> **Kept, not deleted.** The listing copy, the permission justifications, the image specs
+> and the review notes below are real work and are correct for what they describe. If the
+> decision is ever revisited this is the head start. Until then, treat every step as
+> hypothetical, and do not follow section 1 — registering a developer account and paying the
+> fee commits to a route nobody has chosen.
+>
+> If you change this, change `docs/decisions.md` §12 and §14 in the Perch repository in the
+> same edit, along with `TERMS.md` and `PRIVACY.md` here, which now say Hub delivery.
+
 Everything below is ready to paste into the developer dashboard. Sourced from the current
 Chrome Web Store docs (publishing flow, image specs, privacy tab, review process).
 
@@ -25,7 +44,9 @@ cd /Users/trixarh/Downloads/anti-blur && ./build.sh
 ```
 
 That produces `dist/anti-blur-1.0.0.zip` containing only what ships — `manifest.json`,
-`inject.js`, `popup.html`, `privacy-policy.html`, `icons/`. It deliberately excludes
+`inject.js`, `popup.html`, `privacy-policy.html`, `terms.html`, `LICENSE`, `icons/`. The
+two legal pages are both in the package because the popup links to them relatively, so
+dropping either turns a footer link into a dead one. It deliberately excludes
 `.DS_Store`, `__MACOSX/`, `.claude/`, `store-assets/` and the markdown docs.
 
 Your original `anti blur.zip` should **not** be used — it contains `__MACOSX/` resource-fork

@@ -34,7 +34,7 @@ network access, no analytics, no third-party code.
 | `privacy-policy.html`, `PRIVACY.md` | Privacy policy, to host publicly |
 | `store-assets/` | Screenshots and promo tile, plus the HTML they render from |
 | `test/` | Detection bench — see `test/README.md` |
-| `PUBLISHING.md` | Web Store submission guide and listing copy |
+| `PUBLISHING.md` | Web Store submission guide and listing copy &mdash; **a route not taken**; the Hub delivers this extension |
 | `build.sh` | Builds the upload package into `dist/` |
 
 ## Build

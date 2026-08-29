@@ -1,6 +1,6 @@
 # Privacy Policy — Anti Blur
 
-**Chrome extension · Effective 14 August 2026 · Version 1.0.0**
+**Chrome extension · Effective 29 August 2026 · Version 1.0.0**
 
 > **Anti Blur collects nothing.** It has no servers, makes no network requests, stores no
 > data, and contains no analytics, tracking or advertising code. Everything it does happens
@@ -18,8 +18,8 @@ about you, the page, or your activity leaves your device as a result.
 
 ## Data we collect
 
-None. The categories below are the ones Google asks every Chrome Web Store developer to
-declare. Anti Blur collects, transmits and stores *none* of them.
+None. The categories below are the ones Google's extension policy asks a developer to
+declare, used here as a checklist. Anti Blur collects, transmits and stores *none* of them.
 
 | Category | Collected? |
 | --- | --- |
@@ -53,8 +53,8 @@ lending purposes.
 
 ## Remote code
 
-The extension executes no remotely hosted code. All of its code is contained in the package you
-install from the Chrome Web Store and can be inspected there.
+The extension executes no remotely hosted code. All of its code is contained in the package
+the Hub loads into the browser, where it can be inspected.
 
 ## Children
 
@@ -64,8 +64,8 @@ children.
 ## Changes to this policy
 
 If a future version of Anti Blur ever handles data differently, this policy will be updated
-before that version is published, and the effective date above will change. Material changes
-will be noted in the extension's Chrome Web Store listing.
+before that version ships, and the effective date above will change. Material changes will
+be noted in the [Pioneering changelog](https://pioneering.calyndrae.workers.dev/changelog).
 
 ## Contact
 
@@ -73,5 +73,5 @@ Questions about this policy or the extension: **calyndrae@gmail.com**
 
 ---
 
-Anti Blur is provided as-is, free of charge. This policy applies only to the Anti Blur Chrome
-extension and not to any website you visit while it is installed.
+Anti Blur is provided as-is. This policy applies only to the Anti Blur Chrome extension and
+not to any website you visit while it is running.
