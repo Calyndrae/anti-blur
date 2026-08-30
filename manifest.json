@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Anti Blur — Keep Pages Active",
   "short_name": "Anti Blur",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Stops sites from pausing, dimming or tracking you when you switch tabs or click away. No data collected. No account needed.",
   "author": "Calyndrae",
   "homepage_url": "https://calyndrae.com/projects/anti-blur",
