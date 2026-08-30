@@ -1,17 +1,18 @@
 # Terms of Use — Anti Blur
 
-**Chrome extension · Effective 29 August 2026 · Version 1.0.0**
+**Chrome extension · Effective 30 August 2026 · Version 1.0.0**
 
 > **Anti Blur collects nothing and is provided as is.** It is delivered by the Pioneering
-> Hub and included in every plan. You may not copy, resell or republish it. You are
-> responsible for how you use it on the sites you visit.
+> Hub and included in every plan. It is for keeping pages working while you are in another
+> window — **not** for defeating proctoring, a training record, or workplace monitoring
+> you agreed to. You may not copy, resell or republish it.
 
 ## 1. What you may do
 
 Anti Blur is delivered by the Pioneering Hub, which loads it into a browser it starts for
 you. It is included in every Pioneering plan, so a current subscription is what entitles you
 to it. What happens to it if that subscription ends is set out in the
-[Pioneering Terms](https://pioneering.calyndrae.workers.dev/legal/terms) and is not
+[Pioneering Terms](https://pioneering.app/legal/terms.html) and is not
 restated here, so that the two cannot drift apart.
 
 ## 2. What you may not do
@@ -30,14 +31,31 @@ public domain or grant any licence to reuse it. Without written permission you m
 Reading the code to satisfy yourself about what the extension does is expressly fine — that
 is why it is short.
 
-## 3. Your responsibility for how you use it
+## 3. What it is for, and where that stops
 
-Anti Blur changes what websites can observe about your attention. Websites you visit may
-have their own terms of service, and some services, employers or institutions have rules
-about the software you run while using them. Complying with those rules is your
-responsibility, not the author's. Anti Blur is offered as a general-purpose privacy and
-media-playback utility, and no representation is made that using it is permitted in any
-particular context.
+Anti Blur is sold for **keeping video, timers and long-running pages working while you are
+in another window, and for declining to hand a site a record of when your attention was
+elsewhere.** That is what it is built for and the only thing it is sold for.
+
+It does that by telling a page it still has your attention when it does not. Pointed at
+your own privacy, that is the entire point. Pointed at a check somebody else is relying on,
+it is deception.
+
+**You may not use it to defeat a check you agreed to be subject to, or one that someone is
+relying on to make a decision about you** — remote proctoring or invigilation, a training
+or compliance record, monitoring accepted as a condition of work, or anything paid or
+credited by attention. The [Pioneering Terms](https://pioneering.app/legal/terms.html)
+set that out in full, and the rule is the same one here rather than a second version of it
+that could drift.
+
+Earlier versions of this section said only that "no representation is made that using it is
+permitted in any particular context". That is true and it is not an answer: a tool whose
+whole function is changing what a site can observe owes you a plain sentence about what it
+is for, not a disclaimer where the sentence should be.
+
+Websites you visit may have their own terms of service, and some services, employers or
+institutions have rules about the software you run while using them. Complying with those
+rules is your responsibility, not the author's.
 
 ## 4. No warranty
 

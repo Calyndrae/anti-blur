@@ -65,7 +65,7 @@ children.
 
 If a future version of Anti Blur ever handles data differently, this policy will be updated
 before that version ships, and the effective date above will change. Material changes will
-be noted in the [Pioneering changelog](https://pioneering.calyndrae.workers.dev/changelog).
+be noted in the [Pioneering changelog](https://pioneering.app/changelog).
 
 ## Contact
 

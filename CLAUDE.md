@@ -53,10 +53,16 @@ that's worth asking about.*
   alongside the markdown, not generated from it. Change all four.
 - Section 7 of the terms says the effective date moves when the terms do. It is
   in four places; move it in four places.
-- **The Pioneering URLs in those four files are absolute and are a placeholder.**
-  `pioneering.calyndrae.workers.dev` is a `workers.dev` address, not a bought
-  domain; the Perch repository's `docs/decisions.md` §14 records the swap as an
-  open decision. They have to be absolute because a `chrome-extension://` page
-  cannot resolve a site-relative path, which means they ship inside the package
-  and no deploy on the site's side can reach them. When the domain lands, this
-  repository needs the same find-and-replace and a rebuild.
+- **The Pioneering URLs in those four files are absolute, and the swap to the
+  real domain is DONE.** They were `pioneering.calyndrae.workers.dev`, a
+  `workers.dev` address; the domain landed and all of them now say
+  `https://pioneering.app`. They have to stay absolute because a
+  `chrome-extension://` page cannot resolve a site-relative path — which means
+  they ship inside the package and **no deploy on the site's side can reach
+  them**. That is still the thing to remember: a URL that has to change here
+  changes by a rebuild of this repository, and nothing on the server can fix a
+  wrong one after the zip is out.
+- The site canonicalises `/x.html` to `/x` with a 307, so the `.html` forms
+  above work and cost one redirect. Left as-is deliberately: the Perch app's
+  own constants use the same `.html` form, and one convention that redirects
+  beats two that do not agree.
