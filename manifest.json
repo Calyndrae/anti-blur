@@ -2,16 +2,27 @@
   "manifest_version": 3,
   "name": "Anti Blur — Keep Pages Active",
   "short_name": "Anti Blur",
-  "version": "1.0.1",
-  "description": "Stops sites from pausing, dimming or tracking you when you switch tabs or click away. No data collected. No account needed.",
+  "version": "1.1.0",
+  "description": "Stops sites from pausing, dimming or tracking you when you switch tabs or click away. Turn it off for any site in one click. No data collected. No account needed.",
   "author": "Calyndrae",
-  "homepage_url": "https://calyndrae.com/projects/anti-blur",
-  "minimum_chrome_version": "111",
+  "homepage_url": "https://pioneering.app/product/anti-blur/",
+  "minimum_chrome_version": "119",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
+  },
+  "permissions": ["scripting", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "toggle-site": {
+      "suggested_key": { "default": "Alt+Shift+B" },
+      "description": "Turn Anti Blur on or off for this site"
+    }
   },
   "action": {
     "default_title": "Anti Blur",
@@ -22,15 +33,5 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["inject.js"],
-      "run_at": "document_start",
-      "world": "MAIN",
-      "all_frames": true,
-      "match_origin_as_fallback": true
-    }
-  ]
+  }
 }

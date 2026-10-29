@@ -8,8 +8,8 @@ redistribution, resale, republication, or reuse as a template or starter. In
 particular it is not licensed for re-upload to the Chrome Web Store or any other
 extension gallery, in original or modified form.
 
-**Permitted use:** running the extension as the Pioneering Hub delivers it, on a
-current Pioneering plan. Development and modification by Calyndrae only.
+**Permitted use:** running the extension as downloaded from pioneering.app, where
+it is free. Development and modification by Calyndrae only.
 
 **Contact:** calyndrae@gmail.com for licensing questions.
 
@@ -21,23 +21,32 @@ that's worth asking about.*
 
 # Working on this project
 
-- `inject.js` is the whole extension. It runs in the page's MAIN world at
+- `inject.js` is the extension proper. It runs in the page's MAIN world at
   `document_start` and overrides the focus/visibility APIs. Read the comments
   before changing it — several lines exist specifically to defeat a detection
-  technique, and "simplifying" them silently reintroduces the leak.
+  technique, and "simplifying" them silently reintroduces the leak. In
+  particular: **every runtime call goes through the captured `rApply` and the
+  captured getters at the top**, never `.call`, never `this.defaultView`.
+  Probes K3–K5 exist because the first version did that and a page could count
+  it.
+- `background.js` registers `inject.js` (it is NOT in the manifest's
+  `content_scripts`) so that the sites a person switched off can be left out
+  with `excludeMatches`. It also owns the list, the badge and the Alt+Shift+B
+  command. `popup.js` asks it and tells it; nothing else talks to storage.
 - `test/` holds the detection bench. Run **both** harnesses after any change to
-  `inject.js`: `./test/run.sh` (is it detectable?) and
-  `python3 test/verify_function.py` (does it still work?). The stealth summary
-  must stay at `stealthFail: 0`.
+  `inject.js` or `background.js`: `./test/run.sh` (is it detectable?) and
+  `python3 test/verify_function.py` (does it still work, in a really hidden
+  tab — frame loop, focused input, lifecycle events, pagehide, and a site
+  switched off). The stealth summary must stay at `stealthFail: 0`, and every
+  function check must say PASS.
 - `./build.sh` produces the shipping package in `dist/`. It copies an explicit
   file list; anything new that needs to ship must be added there. Both
   `terms.html` and `privacy-policy.html` are in it because the popup footer
   links to them relatively.
-- **Anti Blur is delivered by the Pioneering Hub, not published.** The package
-  comes out of R2 through the entitlement-checked payload route and is loaded
-  over the DevTools protocol into a browser the Hub starts; it is included in a
-  paid plan. `TERMS.md`, `PRIVACY.md` and their HTML twins say so. The Perch
-  repository's `docs/decisions.md` §12 has the reasoning.
+- **Anti Blur is free and a direct download** from pioneering.app/download
+  (since 28 Oct 2026): the zip from `./build.sh`, published to R2, loaded with
+  Chrome's Load unpacked. It is not on the Chrome Web Store. `TERMS.md`,
+  `PRIVACY.md` and their HTML twins say so. The Hub is no longer offered.
 - `PUBLISHING.md` is the Chrome Web Store route, kept for reference and **not
   taken** — its own header says so. Do not act on it without changing the two
   decisions records it names.

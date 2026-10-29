@@ -1,19 +1,18 @@
 # Terms of Use — Anti Blur
 
-**Chrome extension · Effective 30 August 2026 · Version 1.0.0**
+**Chrome extension · Effective 28 October 2026 · Version 1.1.0**
 
-> **Anti Blur collects nothing and is provided as is.** It is delivered by the Pioneering
-> Hub and included in every plan. It is for keeping pages working while you are in another
+> **Anti Blur collects nothing, is free, and is provided as is.** It is for keeping pages
+> working while you are in another
 > window — **not** for defeating proctoring, a training record, or workplace monitoring
 > you agreed to. You may not copy, resell or republish it.
 
 ## 1. What you may do
 
-Anti Blur is delivered by the Pioneering Hub, which loads it into a browser it starts for
-you. It is included in every Pioneering plan, so a current subscription is what entitles you
-to it. What happens to it if that subscription ends is set out in the
-[Pioneering Terms](https://pioneering.app/legal/terms.html) and is not
-restated here, so that the two cannot drift apart.
+Anti Blur is free and needs no account. Download it from the
+[download page](https://pioneering.app/download.html#extensions) and load it into your browser with
+**Load unpacked**. You may use it on machines you own or control, for personal or business
+use.
 
 ## 2. What you may not do
 
@@ -33,9 +32,9 @@ is why it is short.
 
 ## 3. What it is for, and where that stops
 
-Anti Blur is sold for **keeping video, timers and long-running pages working while you are
+Anti Blur is made for **keeping video, timers and long-running pages working while you are
 in another window, and for declining to hand a site a record of when your attention was
-elsewhere.** That is what it is built for and the only thing it is sold for.
+elsewhere.** That is what it is built for and the only thing it is made for.
 
 It does that by telling a page it still has your attention when it does not. Pointed at
 your own privacy, that is the entire point. Pointed at a check somebody else is relying on,
@@ -83,8 +82,7 @@ Anti Blur collects no data of any kind. The
 The author may update, change or withdraw the extension at any time, and may update these
 terms; the effective date above will change when that happens. Continuing to use the
 extension after a change means you accept the revised terms. You can stop using it at any
-time: it runs only in the browser the Hub opens, and it is never installed into a browser
-you use for anything else.
+time by removing it from `chrome://extensions`.
 
 ## 8. Contact
 

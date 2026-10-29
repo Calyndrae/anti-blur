@@ -1,10 +1,10 @@
 # Privacy Policy — Anti Blur
 
-**Chrome extension · Effective 29 August 2026 · Version 1.0.0**
+**Chrome extension · Effective 29 October 2026 · Version 1.1.0**
 
-> **Anti Blur collects nothing.** It has no servers, makes no network requests, stores no
-> data, and contains no analytics, tracking or advertising code. Everything it does happens
-> locally in your browser and is discarded the moment you close the tab.
+> **Anti Blur collects nothing.** It has no servers, makes no network requests, and
+> contains no analytics, tracking or advertising code. The one thing it keeps is the list of
+> sites you have switched it off for, which stays in your browser and is never sent anywhere.
 
 ## What the extension does
 
@@ -19,7 +19,13 @@ about you, the page, or your activity leaves your device as a result.
 ## Data we collect
 
 None. The categories below are the ones Google's extension policy asks a developer to
-declare, used here as a checklist. Anti Blur collects, transmits and stores *none* of them.
+declare, used here as a checklist. Anti Blur collects and transmits *none* of them.
+
+**What it stores, locally:** the hostnames of the sites you switched it off for — for
+example `www.example.com` — and nothing else: not when, not how often, not which page. They
+are kept by Chrome in the extension's own storage on your computer, so that the site stays
+off after a restart. Switching a site back on removes it from the list, and removing the
+extension deletes the list.
 
 | Category | Collected? |
 | --- | --- |
@@ -35,14 +41,18 @@ declare, used here as a checklist. Anti Blur collects, transmits and stores *non
 
 ## Permissions and why they exist
 
-- **Access to the websites you visit** (`<all_urls>` content script). The extension's entire
-  purpose is to change how a page perceives your focus, so its script has to run on the page
-  itself. It runs on every site because focus and visibility detection can appear on any site.
-  The script only reads and modifies browser APIs — it does not read page content, form fields,
-  or anything you type.
+- **Access to the websites you visit** (`<all_urls>` host permission). The extension's
+  entire purpose is to change how a page perceives your focus, so its script has to run on the
+  page itself. It runs on every site because focus and visibility detection can appear on any
+  site. The script only reads and modifies browser APIs — it does not read page content, form
+  fields, or anything you type.
+- **Scripting** (`scripting`). How that script is attached to pages, and how it is kept off
+  the sites you switched Anti Blur off for.
+- **Storage** (`storage`). The list of sites it is off for, described above.
 
-Anti Blur requests no other permissions. It has no background service worker, no storage
-permission, no host permission for any remote server, and no ability to make network requests.
+It also has a background service worker, which keeps that list applied and shows "OFF" on the
+toolbar icon for those sites. Anti Blur requests no other permissions and makes no network
+requests.
 
 ## Data sharing and sale
 
@@ -54,7 +64,7 @@ lending purposes.
 ## Remote code
 
 The extension executes no remotely hosted code. All of its code is contained in the package
-the Hub loads into the browser, where it can be inspected.
+you load into the browser, where it can be inspected.
 
 ## Children
 

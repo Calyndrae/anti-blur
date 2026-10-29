@@ -58,22 +58,56 @@
   .hd { display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
   .hd img { width: 26px; height: 26px; border-radius: 5px; }
   h1 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
-  /* A QUIET LABEL, because it is a label. This popup has no script in it — the
-     badge is the string "ON" and it is true every time anyone opens it. A green
-     pill on a green field is not a focal point, it is more green.
-
-     It was also repeating what the rows below already prove: four spoofed
-     values ARE the extension being on, so saying it again above them is the
-     chrome restating what the content already shows. The colour belongs to the
-     values, which are the substance; this just names the state. */
+  /* THE STATE OF THIS SITE, quietly. It used to be the fixed string "ON",
+     true every time anyone opened it, because nothing could switch it off.
+     Now it can, so it says which — and the colour stays on the dot, not the
+     word: green when on, grey when off. */
   .badge {
     margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
     font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
     color: var(--muted);
   }
-  .badge b {
-    width: 5px; height: 5px; border-radius: 50%; background: var(--ok);
+  .badge b { width: 5px; height: 5px; border-radius: 50%; background: var(--ok); }
+  .badge.off b { background: var(--dim); }
+
+  /* this site — the one thing a person comes here to change */
+  .site {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 0 16px 10px; padding: 10px 12px; border-radius: 8px;
+    background: var(--card); border: 1px solid var(--rule);
   }
+  .host { font: 500 12px/1.3 var(--mono); color: var(--ink); overflow: hidden;
+          text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .switch {
+    flex: none; position: relative; width: 34px; height: 20px; border-radius: 10px;
+    border: 0; padding: 0; cursor: pointer; background: var(--rule);
+    transition: background .15s;
+  }
+  .switch::after {
+    content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px;
+    border-radius: 50%; background: var(--ink); transition: transform .15s;
+  }
+  .switch[aria-checked="true"] { background: var(--ok); }
+  .switch[aria-checked="true"]::after { transform: translateX(14px); background: var(--surface); }
+  .switch:disabled { opacity: .4; cursor: not-allowed; }
+  .switch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { .switch, .switch::after { transition: none; } }
+
+  .status { padding: 0 16px; font-size: 12.5px; font-weight: 500; color: var(--ink); min-height: 19px; }
+  .apply {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 6px 16px 0; font-size: 11.5px; color: var(--muted);
+  }
+  .apply[hidden] { display: none; }
+  .apply button {
+    font: 500 11.5px/1 var(--sans); color: var(--ink); background: transparent;
+    border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; cursor: pointer;
+  }
+  .apply button:hover { border-color: var(--muted); }
+  .apply button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .key { padding: 6px 16px 12px; font-size: 11px; color: var(--dim); }
+  .key[hidden] { display: none; }
+  kbd { font: 500 10.5px/1 var(--mono); color: var(--muted); }
 
   /* readout — the substance: what every page is told */
   .lede {
@@ -90,6 +124,8 @@
     font: 500 11.5px/1.4 var(--mono); color: var(--ok);
     font-variant-numeric: tabular-nums; white-space: nowrap;
   }
+  /* Off for this site: the page is told the truth, so the claims go grey. */
+  dl.off dd { color: var(--dim); text-decoration: line-through; }
 
   /* footer */
   .ft {
@@ -106,13 +142,25 @@
 <div class="hd">
   <img src="icons/icon48.png" alt="">
   <h1>Anti Blur</h1>
-  <p class="badge"><b></b>On</p>
+  <p class="badge" id="badge"><b></b><span id="badge-text">On</span></p>
 </div>
 
-<p class="lede">Every page you open is told the same four things, whatever you are
-actually doing:</p>
+<div class="site">
+  <span class="host" id="host">&nbsp;</span>
+  <button class="switch" id="switch" type="button" role="switch" aria-checked="true"
+          aria-labelledby="host" disabled></button>
+</div>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+<div class="apply" id="apply" hidden>
+  <span>Reload the page to apply.</span>
+  <button type="button" id="reload">Reload</button>
+</div>
+<p class="key" id="key" hidden><kbd id="key-combo"></kbd> toggles the site you are on.</p>
 
-<dl>
+<p class="lede">While it is on, a page is told the same four things, whatever you
+are actually doing:</p>
+
+<dl id="claims">
   <div class="r"><dt>document.hasFocus()</dt><dd>true</dd></div>
   <div class="r"><dt>document.hidden</dt><dd>false</dd></div>
   <div class="r"><dt>visibilityState</dt><dd>"visible"</dd></div>
@@ -125,3 +173,4 @@ actually doing:</p>
   <span><a href="privacy-policy.html" target="_blank" rel="noopener">Privacy</a> ·
         <a href="terms.html" target="_blank" rel="noopener">Terms</a></span>
 </div>
+<script src="popup.js"></script>

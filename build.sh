@@ -12,9 +12,12 @@ OUT="dist/anti-blur-${VERSION}.zip"
 rm -rf dist build
 mkdir -p dist build
 
-cp manifest.json inject.js popup.html privacy-policy.html terms.html LICENSE build/
-mkdir -p build/icons
+cp manifest.json inject.js background.js popup.html popup.js privacy-policy.html terms.html LICENSE build/
+mkdir -p build/icons build/fonts
 cp icons/icon16.png icons/icon32.png icons/icon48.png icons/icon128.png build/icons/
+# The popup's faces. They were referenced by popup.html and never copied, so
+# every shipped popup fell back to the system font without a word.
+cp fonts/*.woff2 build/fonts/
 
 # COPYFILE_DISABLE stops macOS writing ._ AppleDouble files into the archive.
 ( cd build && COPYFILE_DISABLE=1 zip -rq -X "../$OUT" . -x '.*' -x '__MACOSX/*' )

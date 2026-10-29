@@ -441,6 +441,110 @@
     'AEL ownProps=' + Object.getOwnPropertyNames(EventTarget.prototype.addEventListener).join(','), null);
 
   /* =========================================================================
+   * K. CALL-PATH HYGIENE  (v1.1)
+   *    A native getter runs no JavaScript and leaves no frame. Each probe here
+   *    plants a trap the extension could fall into — a patched built-in, a
+   *    stack hook — and reads state. Control and extension must both leave
+   *    the trap untouched.
+   * ====================================================================== */
+  var R_APPLY = Reflect.apply;
+  var hiddenGet = descOf(D, 'hidden').get;
+  var realHasFocusFn = D.hasFocus;
+  function exercise() {
+    void document.hidden; void document.visibilityState; void document.webkitHidden;
+    void document.hasFocus();
+    var id = requestAnimationFrame(function () {});
+    cancelAnimationFrame(id);
+    void FTS.call(document.hasFocus);
+  }
+  function trapMethods(list) {          // [[owner, name], ...] -> {count, restore}
+    var state = { count: 0, saved: [] };
+    list.forEach(function (pair) {
+      var d = descOf(pair[0], pair[1]); if (!d) return;
+      state.saved.push([pair[0], pair[1], d]);
+      var orig = d.value;
+      Object.defineProperty(pair[0], pair[1], Object.assign({}, d, { value: function () {
+        state.count++; return R_APPLY(orig, this, arguments);
+      } }));
+    });
+    state.restore = function () { state.saved.forEach(function (s) { Object.defineProperty(s[0], s[1], s[2]); }); };
+    return state;
+  }
+  function trapGetters(list) {
+    var state = { count: 0, saved: [] };
+    list.forEach(function (pair) {
+      var d = descOf(pair[0], pair[1]); if (!d || !d.get) return;
+      state.saved.push([pair[0], pair[1], d]);
+      var orig = d.get;
+      Object.defineProperty(pair[0], pair[1], Object.assign({}, d, { get: function () {
+        state.count++; return R_APPLY(orig, this, []);
+      } }));
+    });
+    state.restore = function () { state.saved.forEach(function (s) { Object.defineProperty(s[0], s[1], s[2]); }); };
+    return state;
+  }
+
+  var badReceiverStacks = safe(function () {
+    var out = [];
+    try { hiddenGet.call(window); out.push('no-throw'); } catch (e) { out.push(String(e.stack)); }
+    try { realHasFocusFn.call(window); out.push('no-throw'); } catch (e) { out.push(String(e.stack)); }
+    try { requestAnimationFrame(); out.push('no-throw'); } catch (e) { out.push(String(e.stack)); }
+    return out;
+  }, []);
+  rec('K1-stackNamesNoExtension', 'stealth', 'errors thrown by the patched APIs (bad receiver, missing argument) carry no chrome-extension:// frame',
+    (badReceiverStacks.length === 3 && badReceiverStacks.every(function (s) { return s.indexOf('chrome-extension://') === -1; })) ? 'PASS' : 'FAIL',
+    badReceiverStacks.join(' || ').slice(0, 300), null);
+
+  var hookFiles = safe(function () {
+    var had = hasOwn.call(Error, 'prepareStackTrace'), prev = Error.prepareStackTrace, seen = [];
+    Error.prepareStackTrace = function (e, sites) { sites.forEach(function (x) { seen.push(String(x.getFileName())); }); return 'hooked'; };
+    try {
+      try { hiddenGet.call(window); } catch (e) { void e.stack; }
+      try { realHasFocusFn.call(window); } catch (e) { void e.stack; }
+    } finally { if (had) Error.prepareStackTrace = prev; else delete Error.prepareStackTrace; }
+    return seen;
+  }, ['ERR']);
+  rec('K2-prepareStackTraceSeesNoExtension', 'stealth', 'an Error.prepareStackTrace hook is never handed a call site from the extension',
+    (Array.isArray(hookFiles) && hookFiles.every(function (f) { return f.indexOf('chrome-extension://') === -1; })) ? 'PASS' : 'FAIL',
+    J(hookFiles).slice(0, 300), null);
+
+  var callTrap = trapMethods([[Function.prototype, 'call'], [Function.prototype, 'apply'], [Function.prototype, 'bind']]);
+  var callTrapCount = safe(function () { try { exercise(); } finally { callTrap.restore(); } return callTrap.count; });
+  rec('K3-noFunctionCallTraps', 'stealth', 'reading the patched APIs never goes through Function.prototype.call/apply/bind',
+    callTrapCount === 1 ? 'PASS' : 'FAIL', 'trap hits=' + callTrapCount + ' (expected 1: the probe\'s own FTS.call)', null);
+
+  var getterTrap = trapGetters([[D, 'defaultView'], [D, 'activeElement'], [D, 'timeline'], [D, 'documentElement'], [D, 'body'],
+    [Node.prototype, 'ownerDocument'], [Event.prototype, 'target'],
+    [typeof AnimationTimeline === 'function' ? AnimationTimeline.prototype : {}, 'currentTime']]);
+  var getterTrapCount = safe(function () { try { exercise(); } finally { getterTrap.restore(); } return getterTrap.count; });
+  rec('K4-noDomGetterTraps', 'stealth', 'reading the patched APIs never runs a page-reachable DOM getter (defaultView, activeElement, timeline...)',
+    getterTrapCount === 0 ? 'PASS' : 'FAIL', 'trap hits=' + getterTrapCount, null);
+
+  var builtinTrap = trapMethods([[WeakMap.prototype, 'has'], [WeakMap.prototype, 'get'], [Map.prototype, 'get'],
+    [Map.prototype, 'set'], [Map.prototype, 'has'], [Map.prototype, 'delete'], [Map.prototype, 'forEach'],
+    [String.prototype, 'indexOf'], [Array.prototype, 'filter'], [Performance.prototype, 'now'], [window, 'setTimeout']]);
+  var builtinTrapCount = safe(function () { try { exercise(); } finally { builtinTrap.restore(); } return builtinTrap.count; });
+  rec('K5-noBuiltinTraps', 'stealth', 'reading the patched APIs never calls a page-reachable WeakMap/Map/String/Array/Performance/timer method',
+    builtinTrapCount === 0 ? 'PASS' : 'FAIL', 'trap hits=' + builtinTrapCount, null);
+
+  var rafIds = safe(function () {
+    var a = requestAnimationFrame(function () {}), b = requestAnimationFrame(function () {});
+    cancelAnimationFrame(a); cancelAnimationFrame(b); return [a, b];
+  }, [0, 0]);
+  rec('K6-rafIdsConsecutive', 'stealth', 'requestAnimationFrame ids count up by one, as natively',
+    (rafIds[1] === rafIds[0] + 1) ? 'PASS' : 'FAIL', J(rafIds), null);
+
+  var rafShape = safe(function () {
+    return [requestAnimationFrame, cancelAnimationFrame].map(function (f) {
+      return [isNativeStr(FTS.call(f)), f.name, f.length, hasOwn.call(f, 'prototype'),
+              Object.getOwnPropertyNames(f).join(','), descOf(window, f.name) ? descOf(window, f.name).enumerable : null];
+    });
+  }, []);
+  rec('K7-rafLooksNative', 'stealth', 'requestAnimationFrame / cancelAnimationFrame: native toString, name, length 1, no prototype, own props, descriptor',
+    (J(rafShape) === J([[true, 'requestAnimationFrame', 1, false, NATIVE_FN_OWN_PROPS, true],
+                        [true, 'cancelAnimationFrame', 1, false, NATIVE_FN_OWN_PROPS, true]])) ? 'PASS' : 'FAIL', J(rafShape), null);
+
+  /* =========================================================================
    * I. PRISTINE-REALM ESCAPE (async)
    * ====================================================================== */
   // frameprobe.js is the single source of truth for the in-frame self-report.
